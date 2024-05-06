@@ -1,4 +1,4 @@
-name: Recovery Build
+name: Recovery Build RMMSM8953
 
 on:
   workflow_dispatch:
@@ -18,19 +18,19 @@ on:
       DEVICE_TREE_URL:
         description: Device Tree URL
         required: true
-        default: https://github.com/TeamWin/android_device_asus_I003D
+        default: https://github.com/kzsaaf3e/twrp_realme_RMMSM8953.git
       DEVICE_TREE_BRANCH:
         description: Device Tree Branch
         required: true
-        default: android-12.1
+        default: 12.1
       DEVICE_PATH:
         description: Path the device tree should be synced to, relative to source root
         required: true
-        default: device/asus/I003D
+        default: device/realme/RMMSM8953
       DEVICE_NAME:
         description: Device Name from tree (should match name on twrp_<DEVICE_NAME>.mk)
         required: true
-        default: I003D
+        default: RMMSM8953
       REPOPICK_PATCHES:
         description: (Optional) Gerrit commit numbers separated by a space to be included in the build (leave blank if not using)
         type: string
@@ -56,6 +56,16 @@ jobs:
     runs-on: ubuntu-20.04
     # You can use either of the ubuntu-20.04 or ubuntu-22.04 runner
     steps:
+    - name: Notify Building Environment(1/3)
+      run: |
+
+        # Before sending the curl request, make sure to set the bot token:
+        export TELEGRAM_BOT_TOKEN=6788930639:AAHpp3siVn8wnWp3SGOM_uC2EDFaXWjyE6I 
+      
+        curl -X POST \
+             -H 'Content-Type: application/json' \
+             -d '{ "message_thread_id": "2957", "chat_id": "-1001805014416_2975", "text": "Setting Environment Build TWRP For ${{ inputs.DEVICE_NAME }} ", "disable_notification": false}' \
+             https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage
     - name: Display Run Parameters
       run: |
         echo "::group::User Environment Variables"
@@ -266,3 +276,13 @@ jobs:
           Target: ${{ inputs.BUILD_TARGET }}.img
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+- name: Send Release Link To GH
+    run: |
+     # Before sending the curl request, make sure to set the bot token:
+     export TELEGRAM_BOT_TOKEN=1234567890:aBCd_eFGHjk_etc
+
+    # Sending the curl request: 
+    curl -X POST -H 'Content-Type: application/json' \
+    -d '{"message_thread_id": "2975", "chat_id": "-1001805014416_2975", " text": "Recovery Untuk ${{ inputs.DEVICE_NAME }} Telah Dibuat", "reply_markup": {"inline_keyboard": [[{"text":"Release Tag : ${{ github.run_id }}", "url": "https://github.com/kzsaaf3e/twrp_builder_RMMSM8953/releases/download/${{ github.run_id }}/recovery.img"}]]} }' \
+    https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage
