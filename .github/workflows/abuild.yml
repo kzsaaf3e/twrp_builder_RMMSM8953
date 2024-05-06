@@ -286,6 +286,7 @@ jobs:
           Target: ${{ inputs.BUILD_TARGET }}.img
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
     - name: Send Notify Build Success
       run: |
         # Before sending the curl request, make sure to set the bot token:
