@@ -277,12 +277,12 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-- name: Send Release Link To GH
-    run: |
-     # Before sending the curl request, make sure to set the bot token:
-     export TELEGRAM_BOT_TOKEN=1234567890:aBCd_eFGHjk_etc
+   - name: Send Release Link To GH
+     run: |
+       # Before sending the curl request, make sure to set the bot token:
+       export TELEGRAM_BOT_TOKEN=1234567890:aBCd_eFGHjk_etc
 
-    # Sending the curl request: 
-    curl -X POST -H 'Content-Type: application/json' \
-    -d '{"message_thread_id": "2975", "chat_id": "-1001805014416_2975", " text": "Recovery Untuk ${{ inputs.DEVICE_NAME }} Telah Dibuat", "reply_markup": {"inline_keyboard": [[{"text":"Release Tag : ${{ github.run_id }}", "url": "https://github.com/kzsaaf3e/twrp_builder_RMMSM8953/releases/download/${{ github.run_id }}/recovery.img"}]]} }' \
-    https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage
+      # Sending the curl request: 
+      curl -X POST -H 'Content-Type: application/json' \
+      -d '{"message_thread_id": "2975", "chat_id": "-1001805014416_2975", " text": "Recovery Untuk ${{ inputs.DEVICE_NAME }} Telah Dibuat", "reply_markup": {"inline_keyboard": [[{"text":"Release Tag : ${{ github.run_id }}", "url": "https://github.com/kzsaaf3e/twrp_builder_RMMSM8953/releases/download/${{ github.run_id }}/recovery.img"}]]} }' \
+      https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage
