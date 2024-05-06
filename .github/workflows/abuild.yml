@@ -92,16 +92,6 @@ jobs:
       with:
         swap-size-gb: 24
 
-    - name: Notify Build ( 2 / 3 )
-      run: |
-        # Before sending the curl request, make sure to set the bot token:
-        export TELEGRAM_BOT_TOKEN=6788930639:AAHpp3siVn8wnWp3SGOM_uC2EDFaXWjyE6I
-
-        # Sending the curl request: 
-        curl -X POST -H 'Content-Type: application/json' \
-        -d '{"message_thread_id": "2957", "chat_id": "-1001805014416_2957", "text": "Memulai Build (Menyiapkan Env) > Notify 2 / 3"}' \
-        https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage
-
     - name: Prepare the environment
       run: |
         sudo apt update
@@ -247,6 +237,15 @@ jobs:
         cd /usr/bin
         sudo ln -sf python2 python
 
+    - name: Notify Build ( 2 / 3 )
+      run: |
+        export TELEGRAM_BOT_TOKEN=6788930639:AAHpp3siVn8wnWp3SGOM_uC2EDFaXWjyE6I
+
+        curl -X POST -H 'Content-Type: application/json' \
+        -d '{"message_thread_id": "2957", "chat_id": "-1001805014416_2957", "text": "Memulai Build (Menyiapkan Env) > Notify 2 / 3"}' \
+        https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage
+
+
     - name: Building recovery (AOSP)
       if: ${{ steps.buildtree.outputs.value == 'aosp' }} 
       run: |
@@ -289,10 +288,8 @@ jobs:
         
     - name: Send Notify Build Success
       run: |
-        # Before sending the curl request, make sure to set the bot token:
         export TELEGRAM_BOT_TOKEN=6788930639:AAHpp3siVn8wnWp3SGOM_uC2EDFaXWjyE6I
 
-        # Sending the curl request: 
         curl -X POST -H 'Content-Type: application/json' \
         -d '{"message_thread_id": "2957", "chat_id": "-1001805014416_2957", "text": "Terbuild Dengan Sukses TWRP Untuk ${{ inputs.DEVICE NAME}}, "reply_markup": {"inline_keyboard": [[{"text":"Release ID : ${{ github.run_id }}", "url": "http://github.com/kzsaaf3e/twrp_builder_RMMSM8953/releases/download/${{ github.run_id }}/recovery.img"}]]} }' \
         https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage
