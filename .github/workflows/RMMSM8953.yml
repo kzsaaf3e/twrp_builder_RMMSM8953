@@ -65,7 +65,7 @@ jobs:
         # Sending the curl request: 
         curl -X POST -H 'Content-Type: application/json' \
         -d '{"message_thread_id": "2975", "chat_id": "-1001805014416_2975", "text": "Memulai Membangun TWRP Untuk ${{ inputs.DEVICE_NAME }}"}' \
-https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage
+        https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage
     
     - name: Display Run Parameters
       run: |
@@ -247,7 +247,7 @@ https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage
         # Sending the curl request: 
         curl -X POST -H 'Content-Type: application/json' \
         -d '{"message_thread_id": "2975", "chat_id": "-1001805014416_2975", "text": "Memulai Membangun TWRP Untuk ${{ inputs.DEVICE_NAME }} > Memulai Membangun Sumber Daya"}' \
-https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage
+        https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage
 
     - name: Building recovery (AOSP)
       if: ${{ steps.buildtree.outputs.value == 'aosp' }} 
@@ -298,4 +298,4 @@ https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage
         # Sending the curl request: 
         curl -X POST -H 'Content-Type: application/json' \
         -d '{"message_thread_id": "2975", "chat_id": "-1001805014416_2975", "text": "Memulai Membangun TWRP Untuk ${{ inputs.DEVICE_NAME }} > Telah Terbuild, ID Release ${{ github.run_id }}", "reply_markup": {"inline_keyboard": [[{"text":"Download", "url": "https://github.com/twrp_builder_RMMSM8953/releases/download/$}{{ github.run_id }}/${{ inputs.BUILD_TARGET }}.img"}]]} }' \
-https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage
+        https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage
