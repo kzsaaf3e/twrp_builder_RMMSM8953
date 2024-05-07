@@ -1,4 +1,4 @@
-name: Recovery Build RMMSM8953
+name: Dynamic RMMSM8953
 
 on:
   workflow_dispatch:
@@ -58,15 +58,15 @@ jobs:
     steps:
     - name: Notify Building Environment(1/3)
       run: |
-
-        # Before sending the curl request, make sure to set the bot token:
-        export TELEGRAM_BOT_TOKEN=6788930639:AAHpp3siVn8wnWp3SGOM_uC2EDFaXWjyE6I 
       
-        curl -X POST \
-             -H 'Content-Type: application/json' \
-             -d '{ "message_thread_id": "2957", "chat_id": "-1001805014416_2975", "text": "Setting Environment Build TWRP For ${{ inputs.DEVICE_NAME }} ", "disable_notification": false}' \
-             https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage
-             
+        # Before sending the curl request, make sure to set the bot token:
+        export TELEGRAM_BOT_TOKEN=6788930639:AAHpp3siVn8wnWp3SGOM_uC2EDFaXWjyE6I
+
+        # Sending the curl request: 
+        curl -X POST -H 'Content-Type: application/json' \
+        -d '{"message_thread_id": "2975", "chat_id": "-1001805014416_2975", "text": "Memulai Membangun TWRP Untuk ${{ inputs.DEVICE_NAME }}"}' \
+https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage
+    
     - name: Display Run Parameters
       run: |
         echo "::group::User Environment Variables"
@@ -238,6 +238,17 @@ jobs:
         cd /usr/bin
         sudo ln -sf python2 python
 
+    - name: Notify Building Environment(2/3)
+      run: |
+      
+        # Before sending the curl request, make sure to set the bot token:
+        export TELEGRAM_BOT_TOKEN=6788930639:AAHpp3siVn8wnWp3SGOM_uC2EDFaXWjyE6I
+
+        # Sending the curl request: 
+        curl -X POST -H 'Content-Type: application/json' \
+        -d '{"message_thread_id": "2975", "chat_id": "-1001805014416_2975", "text": "Memulai Membangun TWRP Untuk ${{ inputs.DEVICE_NAME }} > Memulai Membangun Sumber Daya"}' \
+https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage
+
     - name: Building recovery (AOSP)
       if: ${{ steps.buildtree.outputs.value == 'aosp' }} 
       run: |
@@ -277,13 +288,14 @@ jobs:
           Target: ${{ inputs.BUILD_TARGET }}.img
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Notify Building Environment(3/3)
+      run: |
+      
+        # Before sending the curl request, make sure to set the bot token:
+        export TELEGRAM_BOT_TOKEN=6788930639:AAHpp3siVn8wnWp3SGOM_uC2EDFaXWjyE6I
 
-   - name: Send Release Link To GH
-     run: |
-       # Before sending the curl request, make sure to set the bot token:
-       export TELEGRAM_BOT_TOKEN=1234567890:aBCd_eFGHjk_etc
-
-      # Sending the curl request: 
-      curl -X POST -H 'Content-Type: application/json' \
-      -d '{"message_thread_id": "2975", "chat_id": "-1001805014416_2975", " text": "Recovery Untuk ${{ inputs.DEVICE_NAME }} Telah Dibuat", "reply_markup": {"inline_keyboard": [[{"text":"Release Tag : ${{ github.run_id }}", "url": "https://github.com/kzsaaf3e/twrp_builder_RMMSM8953/releases/download/${{ github.run_id }}/recovery.img"}]]} }' \
-      https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage
+        # Sending the curl request: 
+        curl -X POST -H 'Content-Type: application/json' \
+        -d '{"message_thread_id": "2975", "chat_id": "-1001805014416_2975", "text": "Memulai Membangun TWRP Untuk ${{ inputs.DEVICE_NAME }} > Telah Terbuild, ID Release ${{ github.run_id }}", "reply_markup": {"inline_keyboard": [[{"text":"Download", "url": "https://github.com/twrp_builder_RMMSM8953/releases/download/$}{{ github.run_id }}/${{ inputs.BUILD_TARGET }}.img"}]]} }' \
+https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage
